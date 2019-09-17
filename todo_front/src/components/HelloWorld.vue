@@ -34,7 +34,7 @@
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String //関数の引数みたいなもの
   }
 }
 </script>
