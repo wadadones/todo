@@ -2,7 +2,7 @@
   //- 親要素にv-appがあればrouter-view下でもいける
   v-app
     router-view
-    sidebar(@show-side-bar="showSideBar")
+    //- sidebar(@show-side-bar="showSideBar")
 </template>
 
 
@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     showSideBar() {
-      
+
     }
   }
 

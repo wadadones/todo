@@ -10,7 +10,7 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', component: ToDoList, props: true },
+    { path: '/', component: ToDoList },
     { path: '/todos/add', component: ToDoForm },
     { path: '/go', component: Go }
   ]

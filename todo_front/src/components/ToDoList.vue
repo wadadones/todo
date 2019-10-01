@@ -9,8 +9,8 @@
         //-   v-col(v-for="n in 3")
         //-     v-card おお
         v-card(v-for="(todo, i) in todos" :key="i" class="ma-2 d-inline-block")
-          v-card-title(v-bind:key="i") {{ todo.title }}
-            v-card-text {{ todo.detail }}
+          v-card-title(v-bind:key="i") {{ todo }}
+            
             v-card-actions
               v-btn(flat icon @click="deleteTodo(i)")
                 v-icon delete
@@ -44,10 +44,10 @@ export default {
     },
     neededRows(num) {
       return Math.ceil(num/3)
-    },
-    showSidebar() {
-      this.$emit('show-side-bar')
     }
+    // showSidebar() {
+    //   this.$emit('show-side-bar')
+    // }
   }
 }
 </script>
