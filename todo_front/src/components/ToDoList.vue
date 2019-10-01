@@ -9,7 +9,7 @@
         //-   v-col(v-for="n in 3")
         //-     v-card おお
         v-card(v-for="(todo, i) in todos" :key="i" class="ma-2 d-inline-block")
-          v-card-title(v-bind:key="i") {{ todo }}
+          v-card-title(v-bind:key="i") {{ todo.title }}
             
             v-card-actions
               v-btn(flat icon @click="deleteTodo(i)")
