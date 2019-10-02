@@ -31,18 +31,23 @@
           template(v-slot:default)
             thead
               tr
-                th.id(width="10%") ID
+                th.id(width="5%") ID
                 th.comment(width="50%") comment
-                th.state(width="20%") state
-                th.button(width="20%") -
+                th.timer(width="25%") timer
+                th.state(width="15%") state
+                th.button(width="5%") -
             tbody
               tr(v-for="todo in computedTodos" :key="todo.id")
                 td {{ todo.id }}
                 td {{ todo.comment }}
+                td
+                  Timer(:timer="todo.time"
+                        :state="todo.timer_state"
+                        @start="start(todo)")
                 td.state
                   v-btn(dark width="30" @click="doChangeState(todo)" :color="colors[todo.state]") {{ labels[todo.state] }}
                 td.button
-                  v-btn(@click="doRemove(todo)" color="red" dark) delete
+                  v-icon(@click="doRemove(todo)") delete
         v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer_right = !drawer_right")
           v-icon(dark) mdi-plus
     //- 右サイドバー
@@ -88,8 +93,13 @@ var todoStorage = {
   }
 }
 
+import Timer from './components/Timer'
+
 export default {
   name: 'App',
+  components: {
+    Timer
+  },
   data() {
     // 使用するデータ
     return {
@@ -102,7 +112,12 @@ export default {
       current: -1, //デフォ値
       drawer_right: false,
       drawer_left: false,
-      comment: ''
+      comment: '',
+
+      timerState: 'stopped',
+      currentTimer: 0,
+      formattedTime: "00:00:00",
+      ticker: undefined
     } 
   },
   created() {
@@ -119,6 +134,8 @@ export default {
       this.todos.push({
         id: todoStorage.uid++,
         comment: this.comment,
+        time: "00:00:00",
+        timer_state: "paused",
         state: 0
       })
       this.comment = '' //フォーム要素を空にする
@@ -129,6 +146,43 @@ export default {
     doRemove(item) {
       var index = this.todos.indexOf(item)
       this.todos.splice(index, 1)
+    },
+    start(item) {
+      // doneのタスクはタイマーをいじれないように
+      if(this.labels[item.state]==="done") return
+      // ストップ
+      if(item.timer_state === "running") {
+        window.clearInterval(this.ticker)
+        item.timer_state = 'paused'
+      }
+      // スタート
+      else if(item.timer_state !== "running") {
+
+        // 他のタイマーを止める
+        this.todos.forEach((item) => {
+          item.timer_state = "paused"
+        })
+        window.clearInterval(this.ticker)
+        this.currentTimer = this.timeToSecond(item.time)
+        this.tick(item)
+        item.timer_state = "running"
+      }
+    },
+    tick(item) {
+      this.ticker = setInterval(() => {
+        this.currentTimer++;
+        item.time = this.formatTime(this.currentTimer)
+      }, 1000)
+    },
+    formatTime(seconds) {
+      let measuredTime = new Date(null)
+      measuredTime.setSeconds(seconds)
+      let HMSTime = measuredTime.toISOString().substr(11,8)
+      return HMSTime
+    },
+    timeToSecond(time) {
+      var splitted_time = time.split(":")
+      return Number(splitted_time[0]) * 3600 + Number(splitted_time[1]) * 60 + Number(splitted_time[2])
     }
   },
   watch: {
