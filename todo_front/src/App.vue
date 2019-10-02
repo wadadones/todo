@@ -1,8 +1,5 @@
 <template lang="pug">
   //- 親要素にv-appがあればrouter-view下でもいける
-  //- v-app
-    //- router-view
-    //- sidebar(@show-side-bar="showSideBar")
   v-app#app
     v-app-bar(app dark elevate-on-scroll color="cyan")
       v-app-bar-nav-icon(@click.stop="drawer_left = !drawer_left")
@@ -14,7 +11,6 @@
       v-btn(right fixed class="hidden-xs-only hidden-md-and-up") sm
       v-btn(right fixed class="hidden-sm-and-up") xs
 
-    //- <!-- 絞り込みラジオボタン -->
     //- v-contentでtoolbarとのマージンをとる
     v-content
       v-container
@@ -23,10 +19,11 @@
         //- v-card(class="d-flex flex-row", color="grey lighten-2", flat, tile)
         //-   v-card(outlined tile class="hidden-md-and-down") おおお
         //-   v-card(outlined tile) おおお
+        
+        //- 絞り込みラジオボタン
         //- ここでradioの値をbinding
         v-radio-group(v-model="current" row)
-          //- div(v-for="label in options")
-          v-radio(v-for="label in options" :value="label.value" :label="label.label")
+          v-radio(v-for="label in options" :value="label.value" :label="label.label" :key="label.id")
 
         //- <!-- テーブルヘッダー -->
         //- v-simple-table.hidden-sm-and-up
@@ -48,6 +45,7 @@
                   v-btn(@click="doRemove(todo)" color="red" dark) delete
         v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer_right = !drawer_right")
           v-icon(dark) mdi-plus
+    //- 右サイドバー
     v-navigation-drawer(v-model="drawer_right" fixed temporary right)
       v-container
         h2 New Task
@@ -59,10 +57,11 @@
             v-model="comment"
           )
           v-btn(type="submit" color="pink" dark) add
-      //- 新規登録フォーム
+    //- 左サイドバー
     v-navigation-drawer(v-model="drawer_left" temporary fixed)
       v-container
         h2 Todo
+    //- フッター
     v-footer.text-center(color="blue-grey darken-3" height="80")
       v-row(justify="center" no-gutters)
          div.blue-grey--text.text--lighten-2 My Todo is sample app for Vue and Vuetify.
@@ -77,6 +76,7 @@ var todoStorage = {
     var todos = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || '[]'
     )
+    // idを0から入れ直す
     todos.forEach(function(todo, index) {
       todo.id = index
     })
@@ -124,7 +124,7 @@ export default {
       this.comment = '' //フォーム要素を空にする
     },
     doChangeState(item) {
-      item.state = item.state? 0 : 1
+      item.state = item.state ? 0 : 1
     },
     doRemove(item) {
       var index = this.todos.indexOf(item)
@@ -133,15 +133,18 @@ export default {
   },
   watch: {
     // オプションを使う場合はオブジェクト形式にする
+    // todosが変わるごとに実行される
     todos: {
       // 引数はウォッチしているプロパティの変更後の値
       handler(todos) {
         todoStorage.save(todos)
       },
       // deep オプションでネストしているデータも監視できる
+      // todos.todo.id, todos.todo.statusの変化も監視できるようになる
       deep: true
     }
   },
+  // 複雑なデータ加工をして出力したいときはこっち(rails modelのscopeみたいなもん))
   computed: {
     // -1なら全てtrue、
     computedTodos() {
@@ -152,6 +155,7 @@ export default {
 
     labels() {
       return this.options.reduce(function(a, b) {
+        // 二つのhashを結合する
         return Object.assign(a, { [b.value]: b.label })
       }, {})
     },
