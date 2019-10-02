@@ -23,8 +23,8 @@
         //- v-card(class="d-flex flex-row", color="grey lighten-2", flat, tile)
         //-   v-card(outlined tile class="hidden-md-and-down") おおお
         //-   v-card(outlined tile) おおお
-
-        v-radio-group(v-model="current")
+        //- ここでradioの値をbinding
+        v-radio-group(v-model="current" row)
           //- div(v-for="label in options")
           v-radio(v-for="label in options" :value="label.value" :label="label.label")
 
