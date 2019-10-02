@@ -42,7 +42,7 @@
                 td {{ todo.id }}
                 td {{ todo.comment }}
                 td.state
-                  v-btn(width="30" @click="doChangeState(todo)") {{ labels[todo.state] }}
+                  v-btn(dark width="30" @click="doChangeState(todo)" :color="colors[todo.state]") {{ labels[todo.state] }}
                 td.button
                   v-btn(@click="doRemove(todo)" color="red" dark) delete
         //- <!-- ToDo テーブル -->
@@ -82,8 +82,8 @@ export default {
       todos: [],
       options: [
         { value: -1, label: 'all' },
-        { value: 0, label: 'WIP' },
-        { value: 1, label: 'done' },
+        { value: 0, label: 'WIP', color: 'blue-grey darken-1' },
+        { value: 1, label: 'done', color: 'green' },
       ],
       current: -1 //デフォ値
     } 
@@ -134,6 +134,12 @@ export default {
     labels() {
       return this.options.reduce(function(a, b) {
         return Object.assign(a, { [b.value]: b.label })
+      }, {})
+    },
+
+    colors() {
+      return this.options.reduce(function(a, b) {
+        return Object.assign(a, { [b.value]: b.color })
       }, {})
     }
   }
