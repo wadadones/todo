@@ -5,7 +5,7 @@
     //- sidebar(@show-side-bar="showSideBar")
   v-app#app
     v-app-bar(app dark elevate-on-scroll color="cyan")
-      v-app-bar-nav-icon
+      v-app-bar-nav-icon(@click.stop="drawer_left = !drawer_left")
       v-toolbar-title My Todo
       //- right fixedはいっしょに使用
       v-btn(right fixed class="hidden-lg-and-down") xl
@@ -46,9 +46,9 @@
                   v-btn(dark width="30" @click="doChangeState(todo)" :color="colors[todo.state]") {{ labels[todo.state] }}
                 td.button
                   v-btn(@click="doRemove(todo)" color="red" dark) delete
-        v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer = !drawer")
+        v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer_right = !drawer_right")
           v-icon(dark) mdi-plus
-    v-navigation-drawer(v-model="drawer" fixed temporary right)
+    v-navigation-drawer(v-model="drawer_right" fixed temporary right)
       v-container
         h2 New Task
         form.add-form(@submit.prevent="doAdd")
@@ -60,6 +60,12 @@
           )
           v-btn(type="submit" color="pink" dark) add
       //- 新規登録フォーム
+    v-navigation-drawer(v-model="drawer_left" temporary fixed)
+      v-container
+        h2 Todo
+    v-footer.text-center(color="blue-grey darken-3" height="80")
+      v-row(justify="center" no-gutters)
+         div.blue-grey--text.text--lighten-2 My Todo is sample app for Vue and Vuetify.
 </template>
 
 
@@ -94,7 +100,8 @@ export default {
         { value: 1, label: 'done', color: 'green' },
       ],
       current: -1, //デフォ値
-      drawer: false,
+      drawer_right: false,
+      drawer_left: false,
       comment: ''
     } 
   },
