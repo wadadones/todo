@@ -24,27 +24,27 @@
           v-card(outlined tile class="hidden-md-and-down") おおお
           v-card(outlined tile) おおお
 
-
-        label(v-for="label in options")
-          input(type="radio" v-model="current" :value="label.value")
-          span {{ label.label }}
+        v-radio-group(v-model="current")
+          //- div(v-for="label in options")
+          v-radio(v-for="label in options" :value="label.value" :label="label.label")
 
         //- <!-- テーブルヘッダー -->
-        table(ma-auto)
-          thead
-            tr
-              th.id ID
-              th.comment comment
-              th.state state
-              th.button -
-          tbody
-            tr(v-for="todo in computedTodos" :key="todo.id")
-              th {{ todo.id }}
-              td {{ todo.comment }}
-              td.state
-                button(@click="doChangeState(todo)") {{ labels[todo.state] }}
-              td.button
-                button(@click="doRemove(todo)") delete
+        v-simple-table(fixed-header height="300px")
+          template(v-slot:default)
+            thead
+              tr
+                th.id(width="10%") ID
+                th.comment(width="50%") comment
+                th.state(width="20%") state
+                th.button(width="20%") -
+            tbody
+              tr(v-for="todo in computedTodos" :key="todo.id")
+                td {{ todo.id }}
+                td {{ todo.comment }}
+                td.state
+                  v-btn(width="30" @click="doChangeState(todo)") {{ labels[todo.state] }}
+                td.button
+                  v-btn(@click="doRemove(todo)" color="red" dark) delete
         //- <!-- ToDo テーブル -->
         h2 new task
         form.add-form(@submit.prevent="doAdd")
