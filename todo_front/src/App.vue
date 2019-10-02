@@ -29,7 +29,8 @@
           v-radio(v-for="label in options" :value="label.value" :label="label.label")
 
         //- <!-- テーブルヘッダー -->
-        v-simple-table(fixed-header height="300px")
+        //- v-simple-table.hidden-sm-and-up
+        v-simple-table
           template(v-slot:default)
             thead
               tr
@@ -125,6 +126,7 @@ export default {
     }
   },
   computed: {
+    // -1なら全てtrue、
     computedTodos() {
       return this.todos.filter(function(el) {
         return this.current < 0 ? true : this.current === el.state
