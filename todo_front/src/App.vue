@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     // 使用するメソッド
-    doAdd: function(event, value) {
+    doAdd() {
       var comment = this.$refs.comment //htmlにref属性を定義する必要あり
       if(!comment.value.length) { //何も入力されてなかったら何もしない
         return
@@ -86,10 +86,10 @@ export default {
       })
       comment.value = '' //フォーム要素を空にする
     },
-    doChangeState: function(item) {
+    doChangeState(item) {
       item.state = item.state? 0 : 1
     },
-    doRemove: function(item) {
+    doRemove(item) {
       var index = this.todos.indexOf(item)
       this.todos.splice(index, 1)
     }
@@ -106,7 +106,7 @@ export default {
     }
   },
   computed: {
-    computedTodos: function() {
+    computedTodos() {
       return this.todos.filter(function(el) {
         return this.current < 0 ? true : this.current === el.state
       }, this) 
