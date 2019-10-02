@@ -3,12 +3,12 @@
   //- v-app
     //- router-view
     //- sidebar(@show-side-bar="showSideBar")
-  div
+  div#app
     h2 My Todo
     //- <!-- 絞り込みラジオボタン -->
     label(v-for="label in options")
-    input(type="radio" v-model="current" :value="label.value")
-    div {{ label.label }}
+      input(type="radio" v-model="current" :value="label.value")
+      span {{ label.label }}
 
     //- <!-- テーブルヘッダー -->
     table
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     // 使用するメソッド
-    doAdd() {
+    doAdd: function(event, value) {
       var comment = this.$refs.comment //htmlにref属性を定義する必要あり
       if(!comment.value.length) { //何も入力されてなかったら何もしない
         return
@@ -86,10 +86,10 @@ export default {
       })
       comment.value = '' //フォーム要素を空にする
     },
-    doChangeState(item) {
+    doChangeState: function(item) {
       item.state = item.state? 0 : 1
     },
-    doRemove(item) {
+    doRemove: function(item) {
       var index = this.todos.indexOf(item)
       this.todos.splice(index, 1)
     }
@@ -106,7 +106,7 @@ export default {
     }
   },
   computed: {
-    computedTodos() {
+    computedTodos: function() {
       return this.todos.filter(function(el) {
         return this.current < 0 ? true : this.current === el.state
       }, this) 
