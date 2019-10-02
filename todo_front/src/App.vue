@@ -151,5 +151,6 @@ export default {
 <style>
   * {
     box-sizing: border-box;
+    touch-action: manipulation;
   }
 </style>
