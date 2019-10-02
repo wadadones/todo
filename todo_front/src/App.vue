@@ -20,9 +20,9 @@
       v-container
         //- v-layout(row wrap)
         //-   v-flex()
-        v-card(class="d-flex flex-row", color="grey lighten-2", flat, tile)
-          v-card(outlined tile class="hidden-md-and-down") おおお
-          v-card(outlined tile) おおお
+        //- v-card(class="d-flex flex-row", color="grey lighten-2", flat, tile)
+        //-   v-card(outlined tile class="hidden-md-and-down") おおお
+        //-   v-card(outlined tile) おおお
 
         v-radio-group(v-model="current")
           //- div(v-for="label in options")
