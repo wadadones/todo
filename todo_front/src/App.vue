@@ -46,13 +46,20 @@
                   v-btn(dark width="30" @click="doChangeState(todo)" :color="colors[todo.state]") {{ labels[todo.state] }}
                 td.button
                   v-btn(@click="doRemove(todo)" color="red" dark) delete
-        //- <!-- ToDo テーブル -->
-        h2 new task
+        v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer = !drawer")
+          v-icon(dark) mdi-plus
+    v-navigation-drawer(v-model="drawer" fixed temporary right)
+      v-container
+        h2 New Task
         form.add-form(@submit.prevent="doAdd")
-          p comment
-          input(type="text" ref="comment")
-          button(type="submit") add
-        //- 新規登録フォーム
+          v-text-field(
+            :counter="10"
+            label="comment"
+            required
+            v-model="comment"
+          )
+          v-btn(type="submit" color="pink" dark) add
+      //- 新規登録フォーム
 </template>
 
 
@@ -86,7 +93,9 @@ export default {
         { value: 0, label: 'WIP', color: 'blue-grey darken-1' },
         { value: 1, label: 'done', color: 'green' },
       ],
-      current: -1 //デフォ値
+      current: -1, //デフォ値
+      drawer: false,
+      comment: ''
     } 
   },
   created() {
@@ -95,16 +104,17 @@ export default {
   methods: {
     // 使用するメソッド
     doAdd() {
-      var comment = this.$refs.comment //htmlにref属性を定義する必要あり
-      if(!comment.value.length) { //何も入力されてなかったら何もしない
+      // console.log(this.$refs.comment)
+      // var comment = this.$refs.comment //htmlにref属性を定義する必要あり
+      if(!this.comment) { //何も入力されてなかったら何もしない
         return
       }
       this.todos.push({
         id: todoStorage.uid++,
-        comment: comment.value,
+        comment: this.comment,
         state: 0
       })
-      comment.value = '' //フォーム要素を空にする
+      this.comment = '' //フォーム要素を空にする
     },
     doChangeState(item) {
       item.state = item.state? 0 : 1
