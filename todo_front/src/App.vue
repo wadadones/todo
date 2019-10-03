@@ -125,6 +125,7 @@ export default {
   },
   created() {
     this.todos = todoStorage.fetch()
+    this.stopAllTimer()
   },
   methods: {
     // 使用するメソッド
@@ -162,10 +163,7 @@ export default {
       else if(item.timer_state !== "running") {
 
         // 他のタイマーを止める
-        this.todos.forEach((item) => {
-          item.timer_state = "paused"
-        })
-        window.clearInterval(this.ticker)
+        this.stopAllTimer()
         this.currentTimer = this.timeToSecond(item.time)
         this.tick(item)
         item.timer_state = "running"
@@ -186,6 +184,12 @@ export default {
     timeToSecond(time) {
       var splitted_time = time.split(":")
       return Number(splitted_time[0]) * 3600 + Number(splitted_time[1]) * 60 + Number(splitted_time[2])
+    },
+    stopAllTimer() {
+      this.todos.forEach((item) => {
+        item.timer_state = "paused"
+      })
+      window.clearInterval(this.ticker)
     }
   },
   watch: {
