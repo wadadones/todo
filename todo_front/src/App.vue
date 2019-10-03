@@ -27,9 +27,7 @@
             v-radio-group(v-model="current" row)
               v-radio(v-for="label in options" :value="label.value" :label="label.label" :key="label.id")
 
-            //- <!-- テーブルヘッダー -->
-            //- v-simple-table.hidden-sm-and-up
-            
+            //- <!-- テーブルヘッダー -->            
             v-simple-table
               template(v-slot:default)
                 thead
@@ -53,6 +51,7 @@
                       v-icon(@click="doRemove(todo)") delete
             v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer_right = !drawer_right")
               v-icon(dark) mdi-plus
+
     //- 右サイドバー
     v-navigation-drawer(v-model="drawer_right" fixed temporary right)
       v-container
@@ -65,10 +64,12 @@
             v-model="comment"
           )
           v-btn(type="submit" color="pink" dark) add
+
     //- 左サイドバー
     v-navigation-drawer(v-model="drawer_left" temporary fixed)
       v-container
         h2 Todo
+
     //- フッター
     v-footer.text-center(color="blue-grey darken-3" height="80")
       v-row(justify="center" no-gutters)
@@ -91,6 +92,7 @@ var todoStorage = {
     todoStorage.uid = todos.length
     return todos
   },
+
   save: function(todos) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
   }
@@ -144,13 +146,16 @@ export default {
       })
       this.comment = '' //フォーム要素を空にする
     },
+
     doChangeState(item) {
       item.state = item.state ? 0 : 1
     },
+
     doRemove(item) {
       var index = this.todos.indexOf(item)
       this.todos.splice(index, 1)
     },
+
     start(item) {
       // doneのタスクはタイマーをいじれないように
       if(this.labels[item.state]==="done") return
@@ -161,7 +166,6 @@ export default {
       }
       // スタート
       else if(item.timer_state !== "running") {
-
         // 他のタイマーを止める
         this.stopAllTimer()
         this.currentTimer = this.timeToSecond(item.time)
@@ -169,22 +173,26 @@ export default {
         item.timer_state = "running"
       }
     },
+
     tick(item) {
       this.ticker = setInterval(() => {
         this.currentTimer++;
         item.time = this.formatTime(this.currentTimer)
       }, 1000)
     },
+
     formatTime(seconds) {
       let measuredTime = new Date(null)
       measuredTime.setSeconds(seconds)
       let HMSTime = measuredTime.toISOString().substr(11,8)
       return HMSTime
     },
+
     timeToSecond(time) {
       var splitted_time = time.split(":")
       return Number(splitted_time[0]) * 3600 + Number(splitted_time[1]) * 60 + Number(splitted_time[2])
     },
+
     stopAllTimer() {
       this.todos.forEach((item) => {
         item.timer_state = "paused"
