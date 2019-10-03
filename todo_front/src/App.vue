@@ -82,6 +82,7 @@
 var STORAGE_KEY = 'todos-vuejs-demo'
 var todoStorage = {
   fetch: function() {
+    console.log("fetched!")
     var todos = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || '[]'
     )
@@ -217,6 +218,7 @@ export default {
   computed: {
     // -1なら全てtrue、
     computedTodos() {
+      console.log("computed!")
       return this.todos.filter(function(el) {
         return this.current < 0 ? true : this.current === el.state
       }, this) 
