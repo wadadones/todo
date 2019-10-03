@@ -14,42 +14,45 @@
     //- v-contentでtoolbarとのマージンをとる
     v-content
       v-container
-        //- v-layout(row wrap)
-        //-   v-flex()
-        //- v-card(class="d-flex flex-row", color="grey lighten-2", flat, tile)
-        //-   v-card(outlined tile class="hidden-md-and-down") おおお
-        //-   v-card(outlined tile) おおお
-        
-        //- 絞り込みラジオボタン
-        //- ここでradioの値をbinding
-        v-radio-group(v-model="current" row)
-          v-radio(v-for="label in options" :value="label.value" :label="label.label" :key="label.id")
+        v-layout(wrap).justify-center
+          v-flex.xs12.md10
+            //- v-layout(row wrap)
+            //-   v-flex()
+            //- v-card(class="d-flex flex-row", color="grey lighten-2", flat, tile)
+            //-   v-card(outlined tile class="hidden-md-and-down") おおお
+            //-   v-card(outlined tile) おおお
+            
+            //- 絞り込みラジオボタン
+            //- ここでradioの値をbinding
+            v-radio-group(v-model="current" row)
+              v-radio(v-for="label in options" :value="label.value" :label="label.label" :key="label.id")
 
-        //- <!-- テーブルヘッダー -->
-        //- v-simple-table.hidden-sm-and-up
-        v-simple-table
-          template(v-slot:default)
-            thead
-              tr
-                th.id(width="5%") ID
-                th.comment(width="50%") comment
-                th.timer(width="25%") timer
-                th.state(width="15%") state
-                th.button(width="5%") -
-            tbody
-              tr(v-for="todo in computedTodos" :key="todo.id")
-                td {{ todo.id }}
-                td {{ todo.comment }}
-                td
-                  Timer(:timer="todo.time"
-                        :state="todo.timer_state"
-                        @start="start(todo)")
-                td.state
-                  v-btn(dark width="30" @click="doChangeState(todo)" :color="colors[todo.state]") {{ labels[todo.state] }}
-                td.button
-                  v-icon(@click="doRemove(todo)") delete
-        v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer_right = !drawer_right")
-          v-icon(dark) mdi-plus
+            //- <!-- テーブルヘッダー -->
+            //- v-simple-table.hidden-sm-and-up
+            
+            v-simple-table
+              template(v-slot:default)
+                thead
+                  tr
+                    th.text-center.px-2(width="5%") ID
+                    th.text-center.px-2(width="60%") comment
+                    th.text-center.px-2(width="20%") timer
+                    th.text-center.px-2(width="10%") state
+                    th.text-center.px-2(width="5%") -
+                tbody
+                  tr(v-for="todo in computedTodos" :key="todo.id")
+                    td.text-center.px-2 {{ todo.id }}
+                    td.px-2 {{ todo.comment }}
+                    td.text-center.px-2
+                      Timer(:timer="todo.time"
+                            :state="todo.timer_state"
+                            @start="start(todo)")
+                    td.text-center.px-2.state
+                      v-btn(dark width="30" @click="doChangeState(todo)" :color="colors[todo.state]") {{ labels[todo.state] }}
+                    td.text-center.px-2.button
+                      v-icon(@click="doRemove(todo)") delete
+            v-btn(color="pink" dark fab right bottom fixed @click.stop="drawer_right = !drawer_right")
+              v-icon(dark) mdi-plus
     //- 右サイドバー
     v-navigation-drawer(v-model="drawer_right" fixed temporary right)
       v-container
