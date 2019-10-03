@@ -58,7 +58,7 @@
         h2 New Task
         form.add-form(@submit.prevent="doAdd")
           v-text-field(
-            :counter="10"
+            :counter="50"
             label="comment"
             required
             v-model="comment"
